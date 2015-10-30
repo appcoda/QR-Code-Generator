@@ -41,20 +41,20 @@ class ViewController: UIViewController {
                 return
             }
             
-            let data = textField.text.dataUsingEncoding(NSISOLatin1StringEncoding, allowLossyConversion: false)
+            let data = textField.text!.dataUsingEncoding(NSISOLatin1StringEncoding, allowLossyConversion: false)
             
-            let filter = CIFilter(name: "CIQRCodeGenerator")
-            
-            filter.setValue(data, forKey: "inputMessage")
-            filter.setValue("Q", forKey: "inputCorrectionLevel")
-            
-            qrcodeImage = filter.outputImage
-            
-            textField.resignFirstResponder()
-            
-            btnAction.setTitle("Clear", forState: UIControlState.Normal)
-            
-            displayQRCodeImage()
+            if let filter = CIFilter(name: "CIQRCodeGenerator") {
+                filter.setValue(data, forKey: "inputMessage")
+                filter.setValue("Q", forKey: "inputCorrectionLevel")
+                
+                qrcodeImage = filter.outputImage
+                
+                textField.resignFirstResponder()
+                
+                btnAction.setTitle("Clear", forState: UIControlState.Normal)
+                
+                displayQRCodeImage()
+            }
         }
         else {
             imgQRCode.image = nil
@@ -75,8 +75,8 @@ class ViewController: UIViewController {
     // MARK: Custom method implementation
     
     func displayQRCodeImage() {
-        let scaleX = imgQRCode.frame.size.width / qrcodeImage.extent().size.width
-        let scaleY = imgQRCode.frame.size.height / qrcodeImage.extent().size.height
+        let scaleX = imgQRCode.frame.size.width / qrcodeImage.extent.size.width
+        let scaleY = imgQRCode.frame.size.height / qrcodeImage.extent.size.height
         
         let transformedImage = qrcodeImage.imageByApplyingTransform(CGAffineTransformMakeScale(scaleX, scaleY))
         
